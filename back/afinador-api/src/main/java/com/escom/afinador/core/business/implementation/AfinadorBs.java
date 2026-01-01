@@ -60,14 +60,14 @@ public class AfinadorBs implements AfinadorService {
 
     private void setBanderaDireccion(Afinador afinador, float cents) {
         if (Math.abs(cents) <= TOLERANCIA_CENTS) {
-            afinador.setSubir(false);
-            afinador.setBajar(false);
+            afinador.setSubir(Boolean.FALSE);
+            afinador.setBajar(Boolean.FALSE);
         } else if (cents < 0) {
-            afinador.setSubir(true);
-            afinador.setBajar(false);
+            afinador.setSubir(Boolean.TRUE);
+            afinador.setBajar(Boolean.FALSE);
         } else {
-            afinador.setSubir(false);
-            afinador.setBajar(true);
+            afinador.setSubir(Boolean.FALSE);
+            afinador.setBajar(Boolean.TRUE);
         }
     }
 
