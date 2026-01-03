@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -31,5 +32,11 @@ public class AfinadorController {
     public Response getAfinador(@Valid AfinadorDTO afinadorDTO) {
         return afinadorService.getAfinacionByHzAndNota(afinadorDTO.toEntity())
                 .map(RespuestaDTO::fromEntity).map(Response::ok).getOrElseGet(ErrorMapper::errorCodeToResponseBuilder).build();
+    }
+
+    @GET
+    @Path("prueba")
+    public String test() {
+        return "ok";
     }
 }

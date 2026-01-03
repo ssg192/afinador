@@ -145,3 +145,17 @@ function updateNeedleVisuals(rotationDeg, isTuned) {
         if(pegElement) pegElement.classList.remove('tuned');
     }
 }
+// ===== TEST CORS =====
+window.testCors = async () => {
+    try {
+        const res = await fetch("http://localhost:8080/afinador/prueba", {
+            method: "GET"
+        });
+
+        console.log("CORS TEST STATUS:", res.status);
+        const text = await res.text();
+        console.log("CORS TEST BODY:", text);
+    } catch (e) {
+        console.error("CORS TEST ERROR:", e);
+    }
+};
