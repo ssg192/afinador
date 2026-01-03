@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afinador Web - Proyecto Titulación</title>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h2>GUITAR TUNER</h2>
+
+    <div class="tuner-body">
+        
+        <div class="peg-column peg-left">
+            <div class="peg-btn" id="peg-E2" onclick="selectString('E2', 82.41)">E</div>
+            <div class="peg-btn" id="peg-A2" onclick="selectString('A2', 110.00)">A</div>
+            <div class="peg-btn" id="peg-D3" onclick="selectString('D3', 146.83)">D</div>
+        </div>
+
+        <div class="display-area">
+            <div class="note-name" id="note-display">--</div>
+            
+            <div class="gauge-wrapper">
+                <div class="gauge-bg"></div>
+                <div class="center-marker"></div>
+                <div class="needle" id="needle"></div>
+                <div class="needle-dot"></div>
+            </div>
+
+            <div class="hz-value" id="hz-display">Selecciona Cuerda</div>
+        </div>
+
+        <div class="peg-column peg-right">
+            <div class="peg-btn" id="peg-E4" onclick="selectString('E4', 329.63)">e</div>
+            <div class="peg-btn" id="peg-B3" onclick="selectString('B3', 246.94)">B</div>
+            <div class="peg-btn" id="peg-G3" onclick="selectString('G3', 196.00)">G</div>
+        </div>
+
+    </div>
+
+    <button id="btn-action">ACTIVAR MICRÓFONO</button>
+    <div class="instruction">Haz clic en una letra para afinar esa cuerda</div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
