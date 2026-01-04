@@ -19,6 +19,9 @@ public class BsConstants {
             Map.entry("D3", 146.83f),  // 4ta cuerda
             Map.entry("G3", 196.00f),  // 3ra cuerda
             Map.entry("B3", 246.94f),  // 2da cuerda
-            Map.entry("E4", 329.63f)   // 1ra cuerda
+            Map.entry("E4", 329.63f),  // 1ra cuerda
+            Map.entry("D4", 293.66f),
+            Map.entry("G4", 392.00f),
+            Map.entry("A4", 440.00f)
     );
 }
