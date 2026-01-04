@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afinador Web - Proyecto Titulación</title>
+    <title>Afinador</title>
     
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <h2>GUITAR TUNER</h2>
+    <h2>Afinador</h2>
 
     <div class="tuner-body">
         
         <div class="peg-column peg-left">
-            <div class="peg-btn" id="peg-E2" onclick="selectString('E2')">E</div>
+             <div class="peg-btn" id="peg-D3" onclick="selectString('D3')">D</div>
             <div class="peg-btn" id="peg-A2" onclick="selectString('A2')">A</div>
-            <div class="peg-btn" id="peg-D3" onclick="selectString('D3')">D</div>
+             <div class="peg-btn" id="peg-E2" onclick="selectString('E2')">E</div>
         </div>
 
         <div class="display-area">
-            <div class="peg-btn auto-btn selected" id="btn-auto" onclick="enableAutoMode()">AUTO</div>
+            <div class="peg-btn auto-btn selected" id="btn-auto" onclick="enableAutoMode()">AUTO.</div>
 
             <div class="note-name" id="note-display">--</div>
             
@@ -35,15 +35,14 @@
         </div>
 
         <div class="peg-column peg-right">
-            <div class="peg-btn" id="peg-E4" onclick="selectString('E4')">e</div>
+         <div class="peg-btn" id="peg-G3" onclick="selectString('G3')">G</div>
             <div class="peg-btn" id="peg-B3" onclick="selectString('B3')">B</div>
-            <div class="peg-btn" id="peg-G3" onclick="selectString('G3')">G</div>
+         <div class="peg-btn" id="peg-E4" onclick="selectString('E4')">E</div>
         </div>
 
     </div>
 
     <button id="btn-action">ACTIVAR MICRÓFONO</button>
-    <div class="instruction">Toca una cuerda o selecciona una nota manualmente</div>
 
     <script type="module" src="script.js"></script>
 </body>

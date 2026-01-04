@@ -4,15 +4,7 @@ import { YIN } from "https://esm.sh/pitchfinder";
 const MIN_FREQ_GUITARRA = 70;
 const MAX_FREQ_GUITARRA = 1200;
 
-// Referencia de frecuencias base (solo para la detección automática del frontend)
-const guitarStrings = [
-    { id: 'peg-E2', note: 'E2', freq: 82.41 },
-    { id: 'peg-A2', note: 'A2', freq: 110.00 },
-    { id: 'peg-D3', note: 'D3', freq: 146.83 },
-    { id: 'peg-G3', note: 'G3', freq: 196.00 },
-    { id: 'peg-B3', note: 'B3', freq: 246.94 },
-    { id: 'peg-E4', note: 'E4', freq: 329.63 }
-];
+// ¡ADIÓS ARRAY DE FRECUENCIAS! Ya no es necesario en el front.
 
 // Variables globales
 let audioContext;
@@ -21,7 +13,7 @@ let detectPitch;
 let isRunning = false;
 
 // Estado del afinador
-let isAutoMode = true; // Empieza en automático
+let isAutoMode = true; 
 let manualNoteName = null; 
 
 // Control de flujo de red
@@ -32,54 +24,48 @@ const btnAction = document.getElementById('btn-action');
 const noteDisplay = document.getElementById('note-display');
 const hzDisplay = document.getElementById('hz-display');
 const needle = document.getElementById('needle');
-const pegs = document.querySelectorAll('.peg-btn'); // Todos los botones circulares
-const btnAuto = document.getElementById('btn-auto'); // El botón Auto
+const pegs = document.querySelectorAll('.peg-btn'); 
+const btnAuto = document.getElementById('btn-auto'); 
 
-// --- 1. FUNCIONES EXPORTADAS (Para el HTML) ---
-
-// Seleccionar cuerda manualmente
+// --- 1. MODO MANUAL ---
 window.selectString = (noteName) => {
     isAutoMode = false;
     manualNoteName = noteName;
     
     // UI: Resaltar botón seleccionado
-    updatePegVisuals(`peg-${noteName}`);
+    highlightPeg(`peg-${noteName}`);
     
-    // UI: Resetear aguja visualmente
     noteDisplay.textContent = noteName;
     hzDisplay.textContent = "Modo Manual";
     resetNeedle();
 };
 
-// Activar modo automático
+// --- 2. MODO AUTOMÁTICO ---
 window.enableAutoMode = () => {
     isAutoMode = true;
     manualNoteName = null;
     
     // UI: Resaltar botón Auto
-    updatePegVisuals('btn-auto');
+    highlightPeg('btn-auto');
     
     noteDisplay.textContent = "--";
     hzDisplay.textContent = "Modo Auto";
     resetNeedle();
 };
 
-// Función auxiliar para iluminar botones
-function updatePegVisuals(activeId) {
-    // Apagar todos (notas y auto)
+// Función auxiliar visual para iluminar botones
+function highlightPeg(elementId) {
+    // Apagar todos
     pegs.forEach(p => {
         p.classList.remove('selected');
         p.classList.remove('tuned');
     });
-    // El querySelectorAll no agarra el btn-auto si no tiene clase peg-btn,
-    // pero como la tiene, debemos asegurarnos de limpiarlo.
     if(btnAuto) {
         btnAuto.classList.remove('selected');
-        // btnAuto.classList.remove('tuned'); // El auto no se pone verde, solo azul
     }
 
-    // Encender el activo
-    const el = document.getElementById(activeId);
+    // Encender el objetivo
+    const el = document.getElementById(elementId);
     if(el) el.classList.add('selected');
 }
 
@@ -88,7 +74,7 @@ function resetNeedle() {
     needle.style.backgroundColor = 'var(--accent-red)';
 }
 
-// --- 2. ACTIVAR MICRÓFONO ---
+// --- 3. ACTIVAR MICRÓFONO ---
 btnAction.addEventListener('click', startMic);
 
 async function startMic() {
@@ -100,14 +86,13 @@ async function startMic() {
         
         const source = audioContext.createMediaStreamSource(stream);
         
-        // --- FILTRO PASA-BAJOS ---
-        // Elimina ruido agudo (19000Hz) antes de procesar
+        // Filtro Pasa-Bajos (Noise Gate físico)
         const lowPassFilter = audioContext.createBiquadFilter();
         lowPassFilter.type = "lowpass"; 
         lowPassFilter.frequency.value = 1500; 
         
         analyser = audioContext.createAnalyser();
-        analyser.fftSize = 4096; // Alta precisión para bajos
+        analyser.fftSize = 4096; 
         
         source.connect(lowPassFilter);
         lowPassFilter.connect(analyser);
@@ -125,71 +110,40 @@ async function startMic() {
     }
 }
 
-// --- 3. BUCLE DE DETECCIÓN ---
+// --- 4. BUCLE DE DETECCIÓN ---
 function detectLoop() {
     const buffer = new Float32Array(analyser.fftSize);
     analyser.getFloatTimeDomainData(buffer);
 
     const frequency = detectPitch(buffer);
 
-    // Filtro Lógico (Solo rango de Guitarra)
+    // Filtro para ignorar ruidos extremos
     if (frequency && frequency > MIN_FREQ_GUITARRA && frequency < MAX_FREQ_GUITARRA) {
         
-        let noteToSend = null;
-
-        if (isAutoMode) {
-            // MODO AUTOMÁTICO: Calcular nota más cercana
-            const closestString = getClosestString(frequency);
-            noteToSend = closestString.note;
-
-            // Iluminamos visualmente la cuerda detectada
-            // NOTA: Mantenemos el btnAuto seleccionado también para indicar el modo
-            highlightDetectedString(closestString.id);
+        // --- AQUÍ ESTÁ EL CAMBIO CLAVE ---
+        if (!isWaitingForResponse) {
             
-            noteDisplay.textContent = noteToSend;
-        } else {
-            // MODO MANUAL: Usar la seleccionada
-            noteToSend = manualNoteName;
+            if (isAutoMode) {
+                // MODO AUTO: Mandamos Hz y nota NULL. El back decidirá.
+                askBackendForTuning(frequency, null);
+            } else {
+                // MODO MANUAL: Mandamos Hz y la nota forzada.
+                askBackendForTuning(frequency, manualNoteName);
+            }
         }
-
-        // Enviar al Backend
-        if (!isWaitingForResponse && noteToSend) {
-            askBackendForTuning(frequency, noteToSend);
-        }
-
     } 
 
     requestAnimationFrame(detectLoop);
 }
 
-// Encuentra la cuerda más cercana en Hz
-function getClosestString(freq) {
-    return guitarStrings.reduce((prev, curr) => {
-        return (Math.abs(curr.freq - freq) < Math.abs(prev.freq - freq) ? curr : prev);
-    });
-}
-
-// Ilumina la clavija detectada en Auto sin apagar el botón Auto
-function highlightDetectedString(idToHighlight) {
-    // Limpiamos solo las clavijas de letras
-    pegs.forEach(p => {
-        if (p.id !== 'btn-auto') {
-            p.classList.remove('selected');
-            p.classList.remove('tuned');
-        }
-    });
-
-    const el = document.getElementById(idToHighlight);
-    if(el) el.classList.add('selected');
-}
-
-// --- 4. COMUNICACIÓN BACKEND ---
+// --- 5. COMUNICACIÓN BACKEND ---
 async function askBackendForTuning(currentHz, targetNote) {
     isWaitingForResponse = true;
 
+    // Si targetNote es null, el JSON enviará "nota": null
     const payload = {
         hz: currentHz,
-        nota: targetNote
+        nota: targetNote 
     };
 
     try {
@@ -201,11 +155,12 @@ async function askBackendForTuning(currentHz, targetNote) {
 
         if (response.ok) {
             const data = await response.json();
-            updateNeedleVisuals(data, targetNote);
+            // data contiene ahora la nota que el backend calculó (ej: "nota": "E2")
+            updateNeedleVisuals(data);
         }
 
     } catch (error) {
-        // Ignorar errores de red temporales
+        // Ignorar
     } finally {
         setTimeout(() => {
             isWaitingForResponse = false;
@@ -213,33 +168,49 @@ async function askBackendForTuning(currentHz, targetNote) {
     }
 }
 
-// --- 5. ACTUALIZAR UI ---
-function updateNeedleVisuals(data, currentNote) {
-    const { cents, afinado, subir, bajar, hz } = data;
+// --- 6. ACTUALIZAR UI CON DATOS DEL BACKEND ---
+function updateNeedleVisuals(data) {
+    // Desestructuramos lo que manda el backend
+    // IMPORTANTE: 'nota' es la cuerda que el backend detectó (ej: "A2")
+    const { cents, afinado, subir, bajar, hz, nota } = data;
 
-    // Clamping visual (Max 45 grados)
+    // 1. Si estamos en modo Auto, actualizamos la interfaz para mostrar
+    // qué nota decidió el backend que estamos tocando.
+    if (isAutoMode && nota) {
+        // Construimos el ID (ej: "peg-" + "A2" = "peg-A2")
+        const detectedPegId = `peg-${nota}`;
+        
+        // Iluminamos ese botón. 
+        // Nota: Mantenemos el btnAuto encendido para saber el modo.
+        highlightPeg(detectedPegId);
+        if(btnAuto) btnAuto.classList.add('selected');
+
+        // Actualizamos la letra gigante
+        noteDisplay.textContent = nota;
+    }
+
+    // 2. Lógica de la Aguja (Clamping)
     let rotation = cents;
     if (rotation > 45) rotation = 45;
     if (rotation < -45) rotation = -45;
 
     needle.style.transform = `rotate(${rotation}deg)`;
 
-    const pegElement = document.getElementById(`peg-${currentNote}`);
+    // 3. Colores y Textos
+    // Buscamos el botón de la nota actual para pintarlo verde si está afinado
+    const currentPegId = isAutoMode ? `peg-${nota}` : `peg-${manualNoteName}`;
+    const pegElement = document.getElementById(currentPegId);
+    
     let displayText = `${hz.toFixed(1)} Hz`;
 
     if (afinado) {
         needle.style.backgroundColor = 'var(--accent-green)';
-        
-        // Iluminar verde la clavija correspondiente
         if(pegElement) pegElement.classList.add('tuned'); 
-        
         displayText += " ¡OK!";
         hzDisplay.style.color = "var(--accent-green)";
     } else {
         needle.style.backgroundColor = 'var(--accent-red)';
-        
         if(pegElement) pegElement.classList.remove('tuned'); 
-        
         hzDisplay.style.color = "#888"; 
 
         if (subir) displayText += " ▲";

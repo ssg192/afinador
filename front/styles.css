@@ -19,7 +19,7 @@ body {
     padding-top: 20px;
 }
 
-h2 { font-weight: 300; letter-spacing: 2px; margin-bottom: 20px; }
+h2 { font-weight: bolder; letter-spacing: 2px; margin-bottom: 20px; }
 
 /* --- CONTENEDOR PRINCIPAL --- */
 .tuner-body {
@@ -113,10 +113,11 @@ h2 { font-weight: 300; letter-spacing: 2px; margin-bottom: 20px; }
 }
 
 .hz-value {
-    font-family: 'Courier New', monospace;
+    font-family: Arial, Helvetica, sans-serif;
     color: #888;
     margin-top: 10px;
     font-size: 14px;
+    font-weight: bold;
 }
 
 /* --- MEDIDOR DE AGUJA (GAUGE) --- */
