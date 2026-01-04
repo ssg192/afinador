@@ -69,7 +69,17 @@ h2 { font-weight: 300; letter-spacing: 2px; margin-bottom: 20px; }
 
 .peg-btn:hover { border-color: var(--accent-blue); color: white; }
 
-/* Estado: Seleccionado (Manual) */
+/* --- ESTILO ESPECIAL PARA EL BOTÓN AUTO (NUEVO) --- */
+.auto-btn {
+    width: 80px; 
+    height: 30px;
+    border-radius: 15px; /* Ovalado */
+    font-size: 14px;
+    margin-bottom: 15px; /* Espacio antes de la nota grande */
+    background-color: #333;
+}
+
+/* Estado: Seleccionado */
 .peg-btn.selected {
     background-color: var(--accent-blue);
     color: white;
@@ -78,12 +88,11 @@ h2 { font-weight: 300; letter-spacing: 2px; margin-bottom: 20px; }
     transform: scale(1.1);
 }
 
-/* Estado: Afinado (Verde) */
+/* Estado: Afinado */
 .peg-btn.tuned {
     background-color: var(--accent-green) !important;
     box-shadow: 0 0 20px var(--accent-green) !important;
     border-color: white;
-    transform: scale(1.1);
 }
 
 /* --- PANTALLA CENTRAL --- */
@@ -146,7 +155,7 @@ h2 { font-weight: 300; letter-spacing: 2px; margin-bottom: 20px; }
     background-color: var(--accent-red);
     transform-origin: bottom center;
     transform: rotate(0deg); 
-    transition: transform 0.1s ease-out, background-color 0.2s; /* Un poco más rápido para respuesta real */
+    transition: transform 0.2s ease-out, background-color 0.2s;
     border-radius: 4px;
     z-index: 5;
     margin-left: -2px;
