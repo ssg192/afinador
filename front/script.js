@@ -146,7 +146,7 @@ async function askBackendForTuning(currentHz, targetNote) {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/afinador', {
+        const response = await fetch('afinador-api-production.up.railway.app/afinador', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
