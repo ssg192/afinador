@@ -14,7 +14,7 @@ public class CorsFilter implements ContainerResponseFilter {
             ContainerResponseContext responseContext) {
 
         responseContext.getHeaders().putSingle(
-                "Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+                "Access-Control-Allow-Origin", "https://afinador-pds.netlify.app/");
         responseContext.getHeaders().putSingle(
                 "Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
         responseContext.getHeaders().putSingle(
