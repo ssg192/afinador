@@ -14,7 +14,7 @@ public class CorsFilter implements ContainerResponseFilter {
             ContainerResponseContext responseContext) {
 
         responseContext.getHeaders().putSingle(
-                "Access-Control-Allow-Origin", "https://afinador-production-0ad7.up.railway.app/");
+                "Access-Control-Allow-Origin", "https://truthful-quietude.railway.internal/");
         responseContext.getHeaders().putSingle(
                 "Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
         responseContext.getHeaders().putSingle(
