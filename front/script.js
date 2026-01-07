@@ -86,7 +86,6 @@ async function startMic() {
         
         const source = audioContext.createMediaStreamSource(stream);
         
-        // Filtro Pasa-Bajos (Noise Gate físico)
         const lowPassFilter = audioContext.createBiquadFilter();
         lowPassFilter.type = "lowpass"; 
         lowPassFilter.frequency.value = 1500; 
