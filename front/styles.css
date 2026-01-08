@@ -5,12 +5,8 @@
     --accent-green: #4CAF50;
     --accent-red: #f44336;
     --text-color: #ffffff;
-
-    /* ESCALA GENERAL */
-    --scale: min(1, 100vw / 360);
 }
 
-/* ------------------ BASE ------------------ */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
@@ -20,55 +16,48 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding-top: calc(20px * var(--scale));
+    padding-top: 20px;
 }
 
-h2 {
-    font-weight: bolder;
-    letter-spacing: calc(2px * var(--scale));
-    margin-bottom: calc(20px * var(--scale));
-}
+h2 { font-weight: bolder; letter-spacing: 2px; margin-bottom: 20px; }
 
-/* ------------------ CONTENEDOR PRINCIPAL ------------------ */
+/* --- CONTENEDOR PRINCIPAL --- */
 .tuner-body {
     position: relative;
-    width: calc(360px * var(--scale));
-    aspect-ratio: 360 / 550;
+    width: 360px;
+    height: 550px;
     background-color: var(--panel-color);
-    border-radius:
-        calc(60px * var(--scale))
-        calc(60px * var(--scale))
-        calc(120px * var(--scale))
-        calc(120px * var(--scale));
-    border: calc(4px * var(--scale)) solid #333;
-    box-shadow: 0 calc(15px * var(--scale)) calc(40px * var(--scale)) rgba(0,0,0,0.6);
+    border-radius: 60px 60px 120px 120px;
+    border: 4px solid #333;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
     display: flex;
     justify-content: center;
-    padding: calc(20px * var(--scale));
+    padding: 20px;
     box-sizing: border-box;
 }
 
-/* ------------------ CLAVIJAS ------------------ */
+/* --- COLUMNAS DE CLAVIJAS --- */
 .peg-column {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: calc(350px * var(--scale));
-    margin-top: calc(40px * var(--scale));
+    height: 350px;
+    margin-top: 40px;
     z-index: 10;
 }
 
-.peg-left  { margin-left: calc(-45px * var(--scale)); }
-.peg-right { margin-right: calc(-45px * var(--scale)); }
+.peg-left { margin-right: auto; margin-left: -45px; }
+.peg-right { margin-left: auto; margin-right: -45px; }
 
+/* --- BOTÓN DE CLAVIJA --- */
 .peg-btn {
-    width: calc(55px * var(--scale));
-    height: calc(55px * var(--scale));
+    width: 55px;
+    height: 55px;
     background-color: #2c2c2c;
-    border: calc(2px * var(--scale)) solid #555;
+    border: 2px solid #555;
     border-radius: 50%;
     color: #aaa;
-    font-size: calc(20px * var(--scale));
+    font-size: 20px;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -78,88 +67,83 @@ h2 {
     user-select: none;
 }
 
-.peg-btn:hover {
-    border-color: var(--accent-blue);
-    color: white;
-}
+.peg-btn:hover { border-color: var(--accent-blue); color: white; }
 
+/* --- ESTILO ESPECIAL PARA EL BOTÓN AUTO (NUEVO) --- */
 .auto-btn {
-    width: calc(80px * var(--scale));
-    height: calc(30px * var(--scale));
-    border-radius: calc(15px * var(--scale));
-    font-size: calc(14px * var(--scale));
-    margin-bottom: calc(15px * var(--scale));
+    width: 80px; 
+    height: 30px;
+    border-radius: 15px; /* Ovalado */
+    font-size: 14px;
+    margin-bottom: 15px; /* Espacio antes de la nota grande */
     background-color: #333;
 }
 
-/* Estados */
+/* Estado: Seleccionado */
 .peg-btn.selected {
     background-color: var(--accent-blue);
     color: white;
     border-color: white;
-    box-shadow: 0 0 calc(15px * var(--scale)) var(--accent-blue);
+    box-shadow: 0 0 15px var(--accent-blue);
     transform: scale(1.1);
 }
 
+/* Estado: Afinado */
 .peg-btn.tuned {
     background-color: var(--accent-green) !important;
-    box-shadow: 0 0 calc(20px * var(--scale)) var(--accent-green) !important;
+    box-shadow: 0 0 20px var(--accent-green) !important;
     border-color: white;
 }
 
-/* ------------------ PANTALLA ------------------ */
+/* --- PANTALLA CENTRAL --- */
 .display-area {
     position: absolute;
-    top: calc(60px * var(--scale));
-    width: calc(220px * var(--scale));
+    top: 60px;
+    width: 220px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .note-name {
-    font-size: calc(90px * var(--scale));
+    font-size: 90px;
     font-weight: 700;
-    height: calc(110px * var(--scale));
-    text-shadow: 0 0 calc(10px * var(--scale)) rgba(255,255,255,0.1);
+    height: 110px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.1);
 }
 
 .hz-value {
     font-family: Arial, Helvetica, sans-serif;
     color: #888;
-    margin-top: calc(10px * var(--scale));
-    font-size: calc(14px * var(--scale));
+    margin-top: 10px;
+    font-size: 14px;
     font-weight: bold;
 }
 
-/* ------------------ MEDIDOR ------------------ */
+/* --- MEDIDOR DE AGUJA (GAUGE) --- */
 .gauge-wrapper {
     position: relative;
-    width: calc(200px * var(--scale));
-    height: calc(100px * var(--scale));
-    margin-top: calc(20px * var(--scale));
+    width: 200px;
+    height: 100px; 
+    margin-top: 20px;
     overflow: hidden;
 }
 
 .gauge-bg {
     position: absolute;
-    bottom: 0;
-    left: calc(10px * var(--scale));
-    width: calc(180px * var(--scale));
-    height: calc(90px * var(--scale));
-    border: calc(10px * var(--scale)) solid #333;
+    bottom: 0; left: 10px;
+    width: 180px; height: 90px;
+    border: 10px solid #333;
     border-bottom: 0;
-    border-top-left-radius: calc(100px * var(--scale));
-    border-top-right-radius: calc(100px * var(--scale));
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
     box-sizing: border-box;
 }
 
 .center-marker {
     position: absolute;
-    top: 0;
-    left: 50%;
-    width: calc(4px * var(--scale));
-    height: calc(15px * var(--scale));
+    top: 0; left: 50%;
+    width: 4px; height: 15px;
     background-color: var(--accent-green);
     transform: translateX(-50%);
     z-index: 1;
@@ -167,53 +151,40 @@ h2 {
 
 .needle {
     position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: calc(4px * var(--scale));
-    height: calc(85px * var(--scale));
+    bottom: 0; left: 50%;
+    width: 4px; height: 85px;
     background-color: var(--accent-red);
     transform-origin: bottom center;
+    transform: rotate(0deg); 
     transition: transform 0.2s ease-out, background-color 0.2s;
-    border-radius: calc(4px * var(--scale));
+    border-radius: 4px;
     z-index: 5;
-    margin-left: calc(-2px * var(--scale));
+    margin-left: -2px;
 }
 
 .needle-dot {
     position: absolute;
-    bottom: calc(-5px * var(--scale));
-    left: 50%;
-    width: calc(14px * var(--scale));
-    height: calc(14px * var(--scale));
+    bottom: -5px; left: 50%;
+    width: 14px; height: 14px;
     background-color: white;
     border-radius: 50%;
     transform: translateX(-50%);
     z-index: 6;
 }
 
-/* ------------------ BOTÓN ------------------ */
+/* --- BOTÓN DE CONTROL --- */
 #btn-action {
-    margin-top: calc(30px * var(--scale));
-    padding: calc(12px * var(--scale)) calc(30px * var(--scale));
-    font-size: calc(16px * var(--scale));
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 16px;
     background: linear-gradient(45deg, #2196F3, #21CBF3);
     border: none;
-    border-radius: calc(25px * var(--scale));
+    border-radius: 25px;
     color: white;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 calc(5px * var(--scale)) calc(15px * var(--scale)) rgba(33,150,243,0.3);
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
 }
+#btn-action:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none;}
 
-#btn-action:disabled {
-    background: #444;
-    color: #888;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-.instruction {
-    font-size: calc(14px * var(--scale));
-    color: #666;
-    margin-top: calc(10px * var(--scale));
-}
+.instruction { font-size: 14px; color: #666; margin-top: 10px; }
